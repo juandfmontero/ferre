@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+
+<html lang="es">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Para mi hermana Gaby ✨</title>
+
+    <style>
+
+        :root {
+
+            --naranja: #ff7900;
+
+            --fondo: linear-gradient(180deg, #a1c4fd 0%, #c2e9fb 100%);s
+
+            /* Colores de las flores pedidos */
+
+            --c1: #8a2be2; /* Morado */
+
+            --c2: #0077b6; /* Azul */
+
+            --c3: #d90429; /* Rojo */
+
+            --c4: #ffea00; /* Amarillo */
+
+            --c5: #ffffff; /* Blanco */
+
+            --c6: #1a1a1a; /* Negro */
+
+            --c7: #808080; /* Gris */
+
+        }
+
+
+
+        body {
+
+            display: flex;
+
+            justify-content: center;
+
+            align-items: center;
+
+            min-height: 100vh;
+
+            margin: 0;
+
+            background: var(--fondo);
+
+            font-family: 'Georgia', serif;
+
+            overflow-x: hidden;
+
+        }
+
+
+
+        /* CORAZÓN NARANJA INICIAL */
+
+        #semilla-naranja {
+
+            width: 60px; height: 60px;
+
+            background-color: var(--naranja);
+
+            position: fixed;
+
+            top: 50%; left: 50%;
+
+            transform: translate(-50%, -50%) rotate(-45deg);
+
+            cursor: pointer;
+
+            animation: latido 1.2s infinite;
+
+            z-index: 1000;
+
+        }
+
+        #semilla-naranja::before, #semilla-naranja::after {
+
+            content: ""; width: 60px; height: 60px;
+
+            background-color: var(--naranja);
+
+            border-radius: 50%; position: absolute;
+
+        }
+
+        #semilla-naranja::before { top: -30px; left: 0; }
+
+        #semilla-naranja::after { left: 30px; top: 0; }
+
+
+
+        @keyframes latido {
+
+            0%, 100% { transform: translate(-50%, -50%) rotate(-45deg) scale(1); }
+
+            50% { transform: translate(-50%, -50%) rotate(-45deg) scale(1.15); }
+
+        }
+
+
+
+        .contenedor-principal {
+
+            display: none;
+
+            flex-direction: column;
+
+            align-items: center;
+
+            gap: 25px;
+
+            width: 100%;
+
+            padding: 20px;
+
+            z-index: 10;
+
+        }
+
+
+
+        /* JARDÍN */
+
+        .jardin {
+
+            display: flex;
+
+            justify-content: center;
+
+            align-items: flex-end;
+
+            gap: 12px;
+
+            height: 220px;
+
+            width: 100%;
+
+            margin-bottom: 20px;
+
+        }
+
+
+
+        .flor-container {
+
+            display: flex;
+
+            flex-direction: column;
+
+            align-items: center;
+
+            height: 0;
+
+            transition: height 2.5s cubic-bezier(0.19, 1, 0.22, 1);
+
+        }
+
+
+
+        .tallo {
+
+            width: 5px; height: 100%;
+
+            background: #2d6a4f;
+
+            border-radius: 3px;
+
+        }
+
+
+
+        .petalos {
+    width: 20px; 
+    height: 20px;
+    border-radius: 50%;
+    position: relative;
+    margin-bottom: 15px; /* Espacio para que los pétalos no choquen con el tallo */
+    z-index: 5;
+    /* Este es el truco: creamos 4 círculos alrededor usando sombras */
+    box-shadow: 
+        0 -15px 0 0 currentcolor,    /* Pétalo superior */
+        0 15px 0 0 currentcolor,     /* Pétalo inferior */
+        -15px 0 0 0 currentcolor,    /* Pétalo izquierdo */
+        15px 0 0 0 currentcolor;     /* Pétalo derecho */
+        }
+
+
+
+        /* MARCO DEL DIBUJO */
+
+        .marco-dibujo {
+
+            width: 260px;
+
+            background: white;
+
+            padding: 12px;
+
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+
+            transform: rotate(-3deg);
+
+            display: none;
+
+            border-radius: 2px;
+
+        }
+
+        .marco-dibujo img {
+
+            width: 100%; height: auto;
+
+            filter: sepia(0.2);
+
+        }
+
+
+
+        /* SOBRE Y CARTA */
+
+        #contenedor-carta {
+
+            display: none;
+
+            flex-direction: column;
+
+            align-items: center;
+
+            width: 100%;
+
+        }
+
+
+
+        .sobre {
+
+            width: 160px; height: 100px;
+
+            background-color: #ffb563;
+
+            border-radius: 0 0 8px 8px;
+
+            cursor: pointer;
+
+            position: relative;
+
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+
+        }
+
+        .sobre::before {
+
+            content: ""; position: absolute; top: 0; left: 0;
+
+            border-left: 80px solid transparent; border-right: 80px solid transparent;
+
+            border-top: 65px solid #ff952b;
+
+            transform-origin: top; transition: transform 0.6s;
+
+        }
+
+        .sobre.abierto::before { transform: rotateX(180deg); }
+
+
+
+        #carta {
+
+            width: 90%; max-width: 450px;
+
+            background: #fffdf9;
+
+            padding: 35px;
+
+            border-radius: 4px;
+
+            display: none;
+
+            box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+
+            border-top: 6px solid var(--naranja);
+
+            line-height: 1.7;
+
+            max-height: 70vh;
+
+            overflow-y: auto;
+
+            color: #333;
+
+        }
+
+
+
+        .firma { text-align: right; font-weight: bold; margin-top: 30px; color: #444; }
+
+
+
+        @media (max-width: 500px) {
+
+            .jardin { gap: 6px; }
+
+            .petalos { width: 28px; height: 28px; }
+
+            #carta { padding: 20px; font-size: 15px; }
+
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+
+
+<audio id="musica-amiga" loop>
+
+    <source src="cancion-gaby.mp3" type="audio/mpeg">
+
+</audio>
+
+
+
+<div id="semilla-naranja" onclick="iniciarJardin()"></div>
+
+
+
+<div class="contenedor-principal" id="main">
+
+    <div class="jardin" id="jardin"></div>
+
+
+
+    <div class="marco-dibujo" id="dibujo">
+
+        <img src="dibujo_de_ella.jpg" alt="Tu arte, Gaby">
+
+        <p style="text-align:center; font-family: sans-serif; font-size: 11px; margin-top: 10px; color: #888;">El dibujo que me regalaste 🎨</p>
+
+    </div>
+
+
+
+    <div id="contenedor-carta">
+
+        <div class="sobre" id="sobre" onclick="abrirCarta()"></div>
+
+        <div id="carta">
+
+            <h2 style="color: var(--naranja); text-align: center; font-size: 1.4em;">A mi hermanita, la que también nos salvó sin saberlo</h2>
+
+            
+
+            <p>Gaby, mi Gaby:</p>
+
+            <p>No sé bien por dónde empezar, porque cuando se trata de vos, las palabras se me mezclan entre la admiración, el orgullo y un cariño tan grande que a veces no me cabe en el pecho.</p>
+
+            <p>Hoy quiero escribirte no como el novio de Zoi, ni como un amigo más. <strong>Quiero escribirte como tu hermano.</strong> El que te ha visto caer, levantarte, llorar y sonreír… y en cada una de esas veces, solo pudo pensar: "Qué afortunado soy de tenerla en mi vida".</p>
+
+            <p>Vos y yo sabemos que la vida no ha sido fácil con vos. Has cargado cosas que nadie debería cargar, has atravesado tormentas que habrían roto a cualquiera. Y aún así, seguís acá, firme, con esa luz que no se apaga por más que intenten apagarla.</p>
+
+            <p>Zoi y yo lo vemos. Lo admiramos. Y sobre todo, lo abrazamos con todo el amor que tenemos para darte.</p>
+
+            <p>Gracias por permitirme ser parte de tu mundo. Gracias por confiar, por reír, por llorar frente a mí sin miedo. Gracias por ser esa hermana que no solo recibe amor, sino que lo devuelve multiplicado, con esa forma tuya tan única de querer.</p>
+
+            <p>No sé si te das cuenta, Gaby, pero <strong>vos también nos salvaste.</strong> En tus momentos difíciles, cuando te abrazamos, también nos abrazamos un poco a nosotros mismos. En tu fortaleza, encontramos la nuestra. Y en tu sonrisa, recordamos por qué vale la pena seguir.</p>
+
+            <p>Hoy no es una fecha especial. Pero para mí, cualquier día es especial si lo comparto con vos. Porque tener una hermana como vos no es algo que pase todos los días.</p>
+
+            <p>Siempre voy a estar acá, Gaby. Para lo que necesites, para lo que calles, para lo que sueñes. Como hermano, como amigo, como familia.</p>
+
+            <p>Te quiero. Te quiero mucho. Y no es para tanto… es para siempre.</p>
+
+
+
+            <div class="firma">Tu hermano,<br>Diego</div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
+<script>
+
+    const colores = ['var(--c1)', 'var(--c2)', 'var(--c3)', 'var(--c4)', 'var(--c5)', 'var(--c6)', 'var(--c7)'];
+
+
+
+    function iniciarJardin() {
+
+        document.getElementById('musica-amiga').play().catch(e => {});
+
+        document.getElementById('semilla-naranja').style.display = 'none';
+
+        document.getElementById('main').style.display = 'flex';
+
+
+
+        const jardin = document.getElementById('jardin');
+
+
+
+        colores.forEach((color, i) => {
+
+            const container = document.createElement('div');
+
+            container.className = 'flor-container';
+
+            // Dentro de tu colores.forEach...
+container.innerHTML = `
+    <div class="petalos" style="color: ${color}; background: #ffea00; border: 2px solid rgba(0,0,0,0.05);"></div>
+    <div class="tallo"></div>
+`;
+            jardin.appendChild(container);
+
+
+
+            setTimeout(() => {
+
+                const altura = window.innerWidth < 500 ? (80 + Math.random()*60) : (130 + Math.random()*70);
+
+                container.style.height = altura + 'px';
+
+            }, i * 350);
+
+        });
+
+
+
+        setTimeout(() => {
+
+            document.getElementById('dibujo').style.display = 'block';
+
+            document.getElementById('contenedor-carta').style.display = 'flex';
+
+        }, 3200);
+
+    }
+
+
+
+    function abrirCarta() {
+
+        const sobre = document.getElementById('sobre');
+
+        const carta = document.getElementById('carta');
+
+        sobre.classList.add('abierto');
+
+        setTimeout(() => {
+
+            sobre.style.display = 'none';
+
+            carta.style.display = 'block';
+
+        }, 600);
+
+    }
+
+</script>
+
+
+
+</body>
+
+</html>
