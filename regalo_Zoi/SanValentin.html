@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Para mi Zoi - Nuestro Árbol</title>
+    <style>
+        :root {
+            --color-corazon: #d90429;
+            --color-morado: #8a2be2; 
+            --color-tronco: #4e2c1c;
+            --fondo: linear-gradient(135deg, #fff0f3 0%, #fce4ec 100%);
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            background: var(--fondo);
+            font-family: 'Georgia', serif;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* --- LA SOLUCIÓN AL CLIC --- */
+        #semilla {
+            width: 60px; height: 60px;
+            background-color: var(--color-corazon);
+            position: fixed; /* Fixed para que no se mueva */
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%) rotate(-45deg);
+            cursor: pointer;
+            animation: latido 1.2s infinite;
+            z-index: 9999; /* POR ENCIMA DE ABSOLUTAMENTE TODO */
+            display: block;
+        }
+        #semilla::before, #semilla::after {
+            content: ""; width: 60px; height: 60px;
+            background-color: var(--color-corazon);
+            border-radius: 50%; position: absolute;
+        }
+        #semilla::before { top: -30px; left: 0; }
+        #semilla::after { left: 30px; top: 0; }
+
+        @keyframes latido {
+            0% { transform: translate(-50%, -50%) rotate(-45deg) scale(1); }
+            50% { transform: translate(-50%, -50%) rotate(-45deg) scale(1.15); }
+            100% { transform: translate(-50%, -50%) rotate(-45deg) scale(1); }
+        }
+
+        .contenedor {
+            display: none; /* Se oculta hasta que des clic */
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            width: 100%;
+            padding: 10px;
+            flex-wrap: wrap;
+            z-index: 10;
+        }
+
+        /* ÁRBOL */
+        #arbol-canvas {
+            position: relative;
+            width: 320px;
+            height: 450px;
+        }
+
+        .tronco {
+            width: 20px; height: 0;
+            background: linear-gradient(to top, #2d1a12, var(--color-tronco));
+            position: absolute; bottom: 0; left: 50%;
+            transform: translateX(-50%);
+            border-radius: 5px;
+            transition: height 2s ease-in-out;
+            z-index: 1;
+        }
+
+        .rama {
+            position: absolute;
+            background-color: var(--color-tronco);
+            height: 8px; width: 0;
+            border-radius: 4px;
+            transition: width 1s ease-in-out;
+            z-index: 2;
+        }
+
+        .corazon-hoja {
+            position: absolute;
+            width: 18px; height: 18px;
+            transform: rotate(-45deg) scale(0);
+            transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            z-index: 15; /* POR ENCIMA DEL TRONCO */
+        }
+        .corazon-hoja::before, .corazon-hoja::after {
+            content: ""; width: 100%; height: 100%;
+            background-color: inherit; border-radius: 50%; position: absolute;
+        }
+        .corazon-hoja::before { top: -50%; left: 0; }
+        .corazon-hoja::after { left: 50%; top: 0; }
+
+        /* CARTA Y SOBRE */
+        #contenedor-carta {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            width: 90%;
+            max-width: 400px;
+        }
+
+        .sobre {
+            position: relative;
+            width: 180px; height: 110px;
+            background-color: #ff8fa3;
+            border-radius: 0 0 10px 10px;
+            cursor: pointer;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            z-index: 30;
+        }
+        .sobre::before {
+            content: ""; position: absolute; top: 0; left: 0;
+            border-left: 90px solid transparent; border-right: 90px solid transparent;
+            border-top: 70px solid #ff4d6d;
+            transform-origin: top; transition: transform 0.6s;
+        }
+        .sobre.abierto::before { transform: rotateX(180deg); }
+
+        #carta {
+            width: 100%;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            max-height: 60vh;
+            overflow-y: auto;
+            display: none;
+            border-left: 5px solid var(--color-morado);
+            line-height: 1.6;
+            z-index: 40;
+        }
+
+        .firma { text-align: right; font-weight: bold; margin-top: 20px; color: var(--color-morado); }
+
+        .lluvia {
+            position: fixed; top: -20px;
+            width: 12px; height: 12px;
+            transform: rotate(-45deg);
+            animation: caer 4s linear forwards;
+            pointer-events: none; /* IMPORTANTE: Para que no estorben al clic */
+            z-index: 5;
+        }
+
+        @media (max-width: 600px) {
+            .contenedor { flex-direction: column; padding-top: 20px; }
+            #arbol-canvas { width: 280px; height: 380px; }
+        }
+
+        @keyframes caer { to { transform: translateY(110vh) rotate(360deg); } }
+    </style>
+</head>
+<body>
+
+<audio id="musica-amor" loop>
+    <source src="Hollow Knight OST-The White Lady.mp3" type="audio/mpeg">
+</audio>
+
+<div id="semilla" onclick="crecerArbol()"></div>
+
+<div class="contenedor" id="main-ui">
+    <div id="arbol-canvas">
+        <div class="tronco" id="tronco"></div>
+    </div>
+
+    <div id="contenedor-carta">
+        <div class="sobre" id="sobre" onclick="abrirCarta()"></div>
+        <div id="carta">
+            <h2 style="color: var(--color-morado); text-align: center;">Para mi Zoi 💜</h2>
+            <p>Mi Zoi, mi amor, mi futuro:</p>
+            <p>Hoy es 14 de febrero.<br>
+            Afuera la gente regala flores compradas, peluches de fábrica, chocolates en caja.<br>
+            Pero yo solo quiero regalarte lo único que siempre fue tuyo desde antes de ser novios: 
+            Mi verdad, mi paciencia, mi promesa de quedarme.</p>
+
+            <p>Este es nuestro primer San Valentín como pareja. Pero no es nuestra primera vez eligiéndonos. 
+            Ya nos elegimos en silencios incómodos, en llamadas de madrugada, en llantos sin consuelo. 
+            Ya nos elegimos cuando el miedo quiso ganarnos y no lo logró. 
+            Ya nos elegimos con el estómago encogido, con las manos temblando, con la certeza de que valía la pena.</p>
+
+            <p>Hoy no tengo un ramo de flores para darte, pero tengo las manos llenas de promesas que he ido tejiendo en estos meses: 
+            La promesa de llegar, la promesa de abrazarte hasta que tu pasado deje de doler, 
+            La promesa de ser el hombre que no solo te ama, sino el que se queda cuando el amor pesa.</p>
+
+            <p>Y sé que aún hay días donde tu mente te susurra que no eres suficiente. 
+            Déjame decítelo hoy, con el corazón desnudo y sin estrategias:<br>
+            <strong>Tú eres la única persona con la que quiero despertar, discutir por la cena, criar gatos y construir un futuro tranquilo.</strong><br>
+            No porque seas perfecta. Sino porque eres vos. Y para mí, eso siempre será más que suficiente.</p>
+
+            <p>Hoy es San Valentín. Pero en nuestra historia, todos los días son 14 de febrero, porque todos los días elijo amarte, y todos los días vos me enseñás que el amor también es quedarse.</p>
+
+            <p>Gracias por no huir. Gracias por creer en nosotros incluso cuando el pasado pesaba más que el presente. Gracias por ser mi lugar seguro, mi musa, mi razón para querer ser mejor hombre.</p>
+
+            <p>Te amo. Hoy, mañana, y en todos los San Valentín que nos quedan por vivir.</p>
+
+            <p>Uno al lado del otro. Por fin.</p>
+
+            <div class="firma">Siempre tuyo, <br>Diego.</div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function crecerArbol() {
+        // Reproducir música
+        const musica = document.getElementById('musica-amor');
+        musica.play().catch(e => console.log("Audio bloqueado"));
+
+        // Ocultar semilla y mostrar interfaz
+        document.getElementById('semilla').style.display = 'none';
+        const contenedor = document.getElementById('main-ui');
+        const tronco = document.getElementById('tronco');
+        const contCarta = document.getElementById('contenedor-carta');
+        
+        contenedor.style.display = 'flex';
+        
+        setTimeout(() => {
+            tronco.style.height = '280px';
+            setTimeout(crearEstructura, 1200);
+            setTimeout(() => {
+                contCarta.style.display = 'flex';
+                setInterval(llover, 300);
+            }, 3500);
+        }, 100);
+    }
+
+    function abrirCarta() {
+        const sobre = document.getElementById('sobre');
+        const carta = document.getElementById('carta');
+        sobre.classList.add('abierto');
+        setTimeout(() => {
+            sobre.style.display = 'none';
+            carta.style.display = 'block';
+        }, 600);
+    }
+
+    function crearEstructura() {
+        const canvas = document.getElementById('arbol-canvas');
+        const ramasInfo = [
+            {b: 60, lado: 'L', ang: 40, len: 75}, {b: 90, lado: 'R', ang: -35, len: 85},
+            {b: 130, lado: 'L', ang: 25, len: 100}, {b: 160, lado: 'R', ang: -20, len: 90},
+            {b: 190, lado: 'L', ang: 35, len: 80}, {b: 220, lado: 'R', ang: -30, len: 75}
+        ];
+
+        ramasInfo.forEach((info, i) => {
+            setTimeout(() => {
+                const rama = document.createElement('div');
+                rama.className = 'rama';
+                rama.style.bottom = info.b + 'px';
+                rama.style.left = '50%';
+                rama.style.transformOrigin = (info.lado === 'L' ? 'right' : 'left');
+                rama.style.transform = `rotate(${info.ang}deg)`;
+                canvas.appendChild(rama);
+                
+                setTimeout(() => {
+                    rama.style.width = info.len + 'px';
+                    if(info.lado === 'L') rama.style.left = `calc(50% - ${info.len}px)`;
+                    for(let j=0; j < 12; j++) {
+                        setTimeout(() => crearHoja(rama, true), 300 + (j * 80));
+                    }
+                }, 100);
+            }, i * 200);
+        });
+        
+        for(let k=0; k < 180; k++) { 
+            setTimeout(crearHojaCopa, 2000 + (k * 25));
+        }
+    }
+
+    function crearHoja(padre, esRama) {
+        const hoja = document.createElement('div');
+        hoja.className = 'corazon-hoja';
+        hoja.style.backgroundColor = Math.random() > 0.6 ? 'var(--color-morado)' : 'var(--color-corazon)';
+        if(esRama) {
+            hoja.style.top = (Math.random() * 40 - 20) + 'px';
+            hoja.style.left = Math.random() * 100 + '%';
+        }
+        padre.appendChild(hoja);
+        const scale = 0.5 + Math.random() * 0.8;
+        setTimeout(() => { hoja.style.transform = `rotate(-45deg) scale(${scale})`; }, 50);
+    }
+
+    function crearHojaCopa() {
+        const canvas = document.getElementById('arbol-canvas');
+        const hoja = document.createElement('div');
+        hoja.className = 'corazon-hoja';
+        hoja.style.backgroundColor = Math.random() > 0.5 ? 'var(--color-morado)' : 'var(--color-corazon)';
+        
+        hoja.style.bottom = (240 + (Math.random() * 220)) + 'px';
+        hoja.style.left = (20 + (Math.random() * 280)) + 'px';
+        
+        const scale = 0.7 + Math.random() * 1.2;
+        canvas.appendChild(hoja);
+        setTimeout(() => { hoja.style.transform = `rotate(-45deg) scale(${scale})`; }, 50);
+    }
+
+    function llover() {
+        const h = document.createElement('div');
+        h.className = 'lluvia corazon-hoja';
+        h.style.left = Math.random() * 100 + 'vw';
+        h.style.backgroundColor = Math.random() > 0.5 ? 'var(--color-morado)' : 'var(--color-corazon)';
+        document.body.appendChild(h);
+        setTimeout(() => h.remove(), 4000);
+    }
+</script>
+
+</body>
+</html>
