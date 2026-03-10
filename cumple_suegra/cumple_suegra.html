@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Feliz Cumpleaños Sra. Florencia 🌸</title>
+    <style>
+        :root {
+            --azul-fondo: #e0f7fa;
+            --rojo-flor: #d90429;
+            --morado: #9c27b0;
+            --diego-blue: #0077b6;
+        }
+
+        body {
+            margin: 0; padding: 0;
+            background: linear-gradient(180deg, #e0f7fa 0%, #b2ebf2 100%);
+            font-family: 'Georgia', serif;
+            display: flex; flex-direction: column; align-items: center;
+            min-height: 100vh; overflow-x: hidden;
+        }
+
+        #boton-inicio {
+            position: fixed; top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center; cursor: pointer; z-index: 1000;
+        }
+
+        .flor-boton {
+            width: 45px; height: 45px; background: #ffea00; border-radius: 50%;
+            margin: 0 auto 15px; position: relative;
+            box-shadow: 0 -20px 0 6px var(--rojo-flor), 0 20px 0 6px var(--rojo-flor),
+                        -20px 0 0 6px var(--rojo-flor), 20px 0 0 6px var(--rojo-flor),
+                        15px 15px 0 6px var(--rojo-flor), -15px -15px 0 6px var(--rojo-flor),
+                        15px -15px 0 6px var(--rojo-flor), -15px 15px 0 6px var(--rojo-flor);
+        }
+
+        .contenedor-principal {
+            display: none; flex-direction: column; align-items: center;
+            width: 90%; max-width: 600px; padding: 40px 0;
+        }
+
+        .jardin {
+            display: flex; justify-content: center; align-items: flex-end;
+            gap: 10px; height: 160px; width: 100%; margin-bottom: 30px;
+        }
+        .flor-container { display: flex; flex-direction: column; align-items: center; height: 0; transition: height 2.5s ease; }
+        .tallo { width: 4px; height: 100%; background: #2d6a4f; border-radius: 2px; }
+        .cabeza-f { width: 12px; height: 12px; background: #ffea00; border-radius: 50%; position: relative; margin-bottom: 10px; }
+        .p-js { position: absolute; width: 12px; height: 20px; border-radius: 50%; bottom: 6px; transform-origin: center bottom; }
+
+        .hoja-carta {
+            background: #ffffff; padding: 35px; border-radius: 8px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1); margin-bottom: 40px;
+            width: 100%; box-sizing: border-box; line-height: 1.8; color: #333;
+        }
+        .hoja-zoi { border-left: 10px solid var(--morado); }
+        .hoja-diego { border-left: 10px solid var(--diego-blue); }
+
+        h2 { margin-top: 0; font-family: sans-serif; letter-spacing: 1px; font-size: 1.4em; }
+        .firma { text-align: right; font-weight: bold; margin-top: 30px; font-style: italic; }
+        
+        img.dibujo-img {
+            width: 100%; border: 12px solid white; 
+            box-shadow: 0 15px 35px rgba(0,0,0,0.15); 
+            border-radius: 4px; margin-bottom: 40px;
+            box-sizing: border-box;
+        }
+    </style>
+</head>
+<body>
+
+<div id="boton-inicio" onclick="comenzar()">
+    <div class="flor-boton"></div>
+    <b style="color: var(--rojo-flor); font-family: sans-serif; font-size: 1.2em;">(Presiona)</b>
+</div>
+
+<audio id="musica-suegra" loop>
+    <source src="cancion-zoi.mp3" type="audio/mpeg">
+</audio>
+
+<div class="contenedor-principal" id="main">
+    
+    <div class="jardin" id="jardin"></div>
+
+   
+    <div class="hoja-carta hoja-zoi">
+        <h2 style="color: var(--morado);">Carta de Zoi</h2>
+        <p>Hey, hola mami, hoy es 9 de marzo y eso significa que cumples otro año más, otro año, en el que estás con nosotros, otro en donde te esfuerzas y sales adelante por nosotros, el día de hoy, aunque no podamos estar contigo, aunque no nos abracemos o digamos lo mucho que te queremos, estamos aquí demostrando lo mucho que me importas.</p>
+        <p>Me criaste desde que tengo memoria, siempre estuviste allí, y aunque en un principio nuestra relación fue complicada, ambas aprendimos a nuestra forma, no fuiste una madre perfecta, pero fuiste la mejor que pude tener, una persona que aún con heridas de su pasado siguió adelante, alguien que aún estando estresada y al borde del colapso siempre iba por más.</p>
+        <p>Luchaste, luchaste por mí, por mi hermana, por tener un futuro, luchaste para que no hubiera dificultades en el futuro, y aunque lo sigues haciendo, es por una mejor causa.</p>
+        <p>Feliz cumpleaños, quiero que el día de hoy estés tranquila, que disfrutes de tu día, que sepas que estamos aquí y que te amamos con el alma...</p>
+        <p>Un año más en donde puedo disfrutarte, un año en donde tu presencia se hace más importante...</p>
+        <div class="firma" style="color: var(--morado);">Felicidades mami 💜<br>Tu hija, Zoi</div>
+    </div>
+
+    <div class="hoja-carta hoja-diego">
+        <h2 style="color: var(--diego-blue);">Carta de Diego</h2>
+        <p style="text-align: center; font-style: italic; font-weight: bold; color: #444; margin-bottom: 25px;">"Gracias por prestarme tu tesoro más grande"</p>
+        <p>Querida Sra Florencia:</p>
+        <p>Hoy es un día especial, y no quería dejar pasar la oportunidad de escribirle estas palabras, aunque sea desde la distancia, para sumarme a su celebración.</p>
+        <p>Quiero que sepa que, aunque todavía no haya tenido el honor de conocerla en persona, ya la respeto y la valoro profundamente. No solo porque es la mamá de la persona que más amo en este mundo, sino porque en estos meses he visto, a través de Zoi, el amor y la dedicación que usted ha puesto en su familia.</p>
+        <p>Gracias por cuidarla. Gracias por estar ahí, incluso en los días difíciles. Gracias por prestarme a su hija, por permitirme amarla, por confiar en mí poquito a poco.</p>
+        <p>Sepa que tiene mi palabra de que voy a cuidar de Zoi siempre. De que voy a estar a su lado, apoyándola, queriéndola, y construyendo con ella un futuro donde sea feliz.</p>
+        <p>Espero pronto poder conocerla, abrazarla, y agradecerle en persona por la mujer maravillosa que crió.</p>
+        <p>Feliz cumpleaños. Que Dios le bendiga, le dé salud, y muchos años más para seguir compartiendo con su familia.</p>
+        <div class="firma" style="color: var(--diego-blue);">Con cariño y respeto,<br>Diego.</div>
+    </div>
+
+</div>
+
+<script>
+function comenzar() {
+    // Reproducir audio
+    const audio = document.getElementById('musica-suegra');
+    audio.play().catch(e => console.log("Espera interacción del usuario"));
+
+    // Mostrar contenido
+    document.getElementById('boton-inicio').style.display = 'none';
+    document.getElementById('main').style.display = 'flex';
+    
+    const jardin = document.getElementById('jardin');
+    const colores = ['#d90429', '#ef233c', '#ff4d6d', '#c9184a', '#ff758f'];
+
+    for(let i=0; i<12; i++) {
+        const color = colores[Math.floor(Math.random()*colores.length)];
+        const florCont = document.createElement('div');
+        florCont.className = 'flor-container';
+        
+        const cabeza = document.createElement('div');
+        cabeza.className = 'cabeza-f';
+        
+        for(let j=0; j<6; j++) {
+            const p = document.createElement('div');
+            p.className = 'p-js';
+            p.style.background = color;
+            p.style.transform = `rotate(${j*60}deg)`;
+            cabeza.appendChild(p);
+        }
+
+        florCont.appendChild(cabeza);
+        const tallo = document.createElement('div');
+        tallo.className = 'tallo';
+        florCont.appendChild(tallo);
+        jardin.appendChild(florCont);
+
+        setTimeout(() => {
+            florCont.style.height = (60 + Math.random()*80) + 'px';
+        }, i * 180);
+    }
+}
+</script>
+</body>
+</html>
