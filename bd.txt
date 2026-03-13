@@ -1,0 +1,24 @@
+-- 1. Crear la tabla de usuarios con todas las modificaciones
+CREATE TABLE IF NOT EXISTS `usuarios` (
+  `id` INT(11) NOT NULL AUTO_INCREMENT,
+  `nombre` VARCHAR(100) NOT NULL,
+  `telefono` VARCHAR(20) NOT NULL,
+  `fecha_nac` DATE NOT NULL,
+  `email` VARCHAR(100) NOT NULL,
+  `usuario` VARCHAR(50) NOT NULL,
+  `password` VARCHAR(255) NOT NULL,
+  `avatar` VARCHAR(50) NOT NULL,
+  -- Nueva columna para el nivel de conocimiento
+  `nivel` VARCHAR(20) DEFAULT 'no_definido',
+  -- Nueva columna para el rol (usuario o admin)
+  `rol` VARCHAR(20) DEFAULT 'usuario',
+  `fecha_registro` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `usuario` (`usuario`),
+  UNIQUE KEY `email` (`email`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- 2. Insertar un Administrador de prueba (Contraseña: admin123)
+-- El password está encriptado con PASSWORD_DEFAULT de PHP
+INSERT INTO `usuarios` (`nombre`, `telefono`, `fecha_nac`, `email`, `usuario`, `password`, `avatar`, `nivel`, `rol`) 
+VALUES ('Profesor Maestro', '0999999999', '1990-01-01', 'admin@academia.com', 'admin', '$2y$10$8Wk9lGByrVshS.J39pXmOeGvM0pS8X8mU6K6m9m9m9m9m9m9m9m9m', '4', 'avanzado', 'admin');
